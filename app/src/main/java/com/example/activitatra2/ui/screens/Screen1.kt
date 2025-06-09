@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.example.activitatra2.data.model.nueva.Character
 import com.example.activitatra2.data.model.nueva.Data
 import com.example.activitatra2.data.model.nueva.Info
@@ -28,7 +28,7 @@ import com.example.apilist.viewmodel.APIViewModelFactory
 
 @Composable
 fun Screen1(
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (String) -> Unit,
     settingsRepository: SettingsRepository,
     viewModelStoreOwner: ViewModelStoreOwner
 ) {

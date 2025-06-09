@@ -55,7 +55,7 @@ fun NavigationWrapper(navController: NavHostController, settingsRepository: Sett
                 Screen2(
                     viewModel = apiViewModel,
                     navigateToDetail = { id ->
-                        navController.navigate(Destinations.Detall(id))
+                        navController.navigate(Destinations.Detall(id.toString()))
                     },
                 )
             }
@@ -77,7 +77,7 @@ fun NavigationWrapper(navController: NavHostController, settingsRepository: Sett
                 color = if (isDarkModeEnabled) Color.Black else Color.White
             ) {
                 DetallScreen(
-                    id = id,
+                    id = id.toString(),
                     navigateBack = {
                         navController.navigate(Destinations.Pantalla1) {
                             popUpTo(Destinations.Pantalla1) {

@@ -14,6 +14,6 @@ sealed class Destinations {
     object Pantalla3 : Destinations()
 
     @Serializable
-    data class Detall(val id: Int)
+    data class Detall(val id: String)
 
 }

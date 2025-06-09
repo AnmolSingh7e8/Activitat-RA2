@@ -17,6 +17,8 @@ class CharacterApplication : Application() {
                     applicationContext,
                     AppDatabase::class.java,
                     "starwars_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
         }

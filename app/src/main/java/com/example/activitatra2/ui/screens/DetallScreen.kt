@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DetallScreen(
-    id: Int,
+    id: String,
     navigateBack: () -> Unit,
     settingsRepository: SettingsRepository,
     viewModelStoreOwner: ViewModelStoreOwner
@@ -44,7 +44,7 @@ fun DetallScreen(
 
     LaunchedEffect(id) {
         viewModel.getCharacters()
-        isFavorite = viewModel.esFavorito(id)
+        isFavorite = viewModel.esFavorito(id.toString())
     }
 
     if (characters.data?.isEmpty() ?: true) {

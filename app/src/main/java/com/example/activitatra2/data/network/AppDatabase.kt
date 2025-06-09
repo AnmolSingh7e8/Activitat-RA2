@@ -9,7 +9,7 @@ import com.example.activitatra2.data.model.nueva.Data
 import com.example.apilist.data.model.Converters
 import com.example.apilist.data.model.Item
 
-@Database(entities = [Data::class], version = 1)
+@Database(entities = [Data::class], version = 2)
 @TypeConverters(Converters::class) //Uso del convertidor de tipos
 abstract class AppDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao

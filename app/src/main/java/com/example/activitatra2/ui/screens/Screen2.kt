@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.apilist.viewmodel.APIViewModel
 
 @Composable
-fun Screen2(viewModel: APIViewModel, navigateToDetail: (Int) -> Unit) {
+fun Screen2(viewModel: APIViewModel, navigateToDetail: (String) -> Unit) {
     val favorites by viewModel.favorites.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.loadFavorites()

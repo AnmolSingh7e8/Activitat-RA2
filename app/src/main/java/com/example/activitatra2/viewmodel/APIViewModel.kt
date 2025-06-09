@@ -82,7 +82,7 @@ class APIViewModel(
         }
     }
 
-    suspend fun esFavorito(id: Int): Boolean {
+    suspend fun esFavorito(id: String): Boolean {
         return repository.getFavorites().any { it.id == id }
     }
 
