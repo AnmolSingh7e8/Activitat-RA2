@@ -1,4 +1,4 @@
-package com.example.activitatra2.ui.theme
+package com.example.apilist.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
