@@ -7,11 +7,15 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 //API interface para Starwars characters
 interface ApiInterface {
     @GET("characters?page=1&limit=10")
     suspend fun getData(): Response<Character>
+
+    @GET("api/v1/characters/name/{name}")
+    suspend fun getCharacterByName(@Path("name") name: String): Response<Character>
 
     companion object {
         private const val BASE_URL = "https://starwars-databank-server.vercel.app/api/v1/"

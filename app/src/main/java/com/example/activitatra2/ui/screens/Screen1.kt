@@ -81,7 +81,7 @@ fun Screen1(
                 ) {
                     items(filteredCharacters) { character: Data ->
                         CharacterItem(character) {
-                            navigateToDetail(character.id)
+                            navigateToDetail(character.name)
                         }
                     }
                 }
@@ -94,7 +94,7 @@ fun Screen1(
                 ) {
                     items(filteredCharacters) { character: Data ->
                         CharacterItem(character) {
-                            navigateToDetail(character.id)
+                            navigateToDetail(character.name)
                         }
                     }
                 }

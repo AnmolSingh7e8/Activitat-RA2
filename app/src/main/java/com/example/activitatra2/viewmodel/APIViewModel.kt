@@ -1,6 +1,7 @@
 package com.example.apilist.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import coil3.util.CoilUtils.result
 import com.example.activitatra2.data.model.nueva.Character
 import com.example.activitatra2.data.model.nueva.Data
 import com.example.apilist.data.database.Repository
+import com.example.apilist.data.model.Personatge
 import com.example.apilist.data.model.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,10 @@ class APIViewModel(
 
     private val _characters = MutableLiveData<Character>()
     val characters: LiveData<Character> get() = _characters
+
+    private val _selectedCharacter = mutableStateOf<Personatge?>(null)
+    val selectedCharacter = _selectedCharacter
+
 
     private val _showLoading = MutableLiveData<Boolean>(true)
     val showLoading: LiveData<Boolean> get() = _showLoading
@@ -69,6 +75,17 @@ class APIViewModel(
             }
         }
     }
+
+//    fun getCharacterByName(name: String) {
+//        viewModelScope.launch {
+//            try {
+//                selectedCharacter.value = repository.getCharacterByName(name)
+//            } catch (e: Exception) {
+//                selectedCharacter.value = null
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
     fun guardarFavorito(data: Data) {
         viewModelScope.launch {

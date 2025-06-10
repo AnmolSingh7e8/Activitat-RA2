@@ -1,4 +1,4 @@
-package com.example.apilist.ui.screens
+package com.example.activitatra2.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.example.activitatra2.data.model.nueva.Info
+import com.example.activitatra2.data.model.nueva.Data
+import com.example.apilist.data.model.Personatge
 import com.example.apilist.data.model.SettingsRepository
 import com.example.apilist.viewmodel.APIViewModel
 import com.example.apilist.viewmodel.APIViewModelFactory
@@ -35,105 +36,99 @@ fun DetallScreen(
     val viewModel: APIViewModel =
         viewModel(viewModelStoreOwner = viewModelStoreOwner, factory = factory)
 
-    val characters by viewModel.characters.observeAsState(
-        com.example.activitatra2.data.model.nueva.Character(emptyList(), Info(0, "", 0, 0, 0))
-    )
-
+    var character by remember { mutableStateOf<Personatge?>(null) }
     var isFavorite by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(id) {
         viewModel.getCharacters()
-        isFavorite = viewModel.esFavorito(id.toString())
     }
 
-    if (characters.data?.isEmpty() ?: true) {
+    if (character == null) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Text("Aquest personatge no està desat a favorits", color = MaterialTheme.colorScheme.error)
         }
-    } else {
-        val character = characters.data?.find { it.id == id }
+        return
+    }
 
-        if (character != null) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Box(
+    // CONTINGUT DETALL
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            // Icon favorit
+            Icon(
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Toggle Favorite",
+                tint = if (isFavorite) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .background(MaterialTheme.colorScheme.background),
-                ) {
-                    // Icono favorito con click para guardar/eliminar
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Toggle Favorite",
-                        tint = if (isFavorite) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .align(Alignment.End)
-                            .clickable {
-                                isFavorite = !isFavorite
-                                coroutineScope.launch {
-                                    if (isFavorite) {
-                                        viewModel.guardarFavorito(character)
-                                    } else {
-                                        viewModel.eliminarFavorito(character)
-                                    }
-                                }
+                    .size(40.dp)
+                    .align(Alignment.End)
+                    .padding(16.dp)
+                    .clickable {
+                        coroutineScope.launch {
+                            if (isFavorite) {
+                                viewModel.eliminarFavorito(
+                                    Data(
+                                        id = character!!.id,
+                                        name = character!!.name,
+                                        image = character!!.image ?: "",
+                                        description = character!!.affiliation ?: "Sense descripció",
+                                        __v = 0
+                                    )
+                                )
+                            } else {
+                                viewModel.guardarFavorito(
+                                    Data(
+                                        id = character!!.id,
+                                        name = character!!.name,
+                                        image = character!!.image ?: "",
+                                        description = character!!.affiliation ?: "Sense descripció",
+                                        __v = 0
+                                    )
+                                )
                             }
-                    )
-
-                    AsyncImage(
-                        model = character.image,
-                        contentDescription = "Character Image",
-                        modifier = Modifier
-                            .size(250.dp)
-                            .padding(16.dp),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    Text(
-                        text = character.name,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-
-                    Button(
-                        onClick = navigateBack,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .width(250.dp)
-                            .height(50.dp)
-                    ) {
-                        Text("Return", fontSize = 18.sp)
+                            isFavorite = !isFavorite
+                        }
                     }
-                }
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+            )
+
+            AsyncImage(
+                model = character?.image,
+                contentDescription = "Imatge del personatge",
+                modifier = Modifier
+                    .size(250.dp)
+                    .padding(16.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Text(
+                text = character!!.name,
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            Button(
+                onClick = navigateBack,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .width(250.dp)
+                    .height(50.dp)
             ) {
-                Text(
-                    "Character not found",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.error
-                )
+                Text("Tornar", fontSize = 18.sp)
             }
         }
     }
